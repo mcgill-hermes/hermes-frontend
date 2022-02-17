@@ -1,13 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
+import { Navigate } from 'react-router-dom';
 import { Layout, Form, Button, Input, Checkbox, Row } from "antd";
 import "./Login.css";
 import Navbar from "./Navbar";
+
 const { Content } = Layout;
 
 export default function Login() {
+  const [userInfo, setUserInfo] = useState({
+    username: ''
+  })
+  const [redirect, setRedirect] = useState(false);
+  if (redirect) {
+    var data = JSON.stringify(userInfo)
+    return <Navigate push to={{
+      pathname: "/profile",
+      state: { username: userInfo }
+
+    }} />
+
+  }
   const onFinish = (values) => {
     console.log("Success:", values);
+    setRedirect(true)
   };
+  //get the username need for profile
+  const changeHandle = e => {
+    setUserInfo({
+      ...userInfo,
+      [e.target.name]: e.target.value
+    })
+    console.log(userInfo)
+  }
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -43,6 +67,8 @@ export default function Login() {
               <Form.Item
                 label="Username"
                 name="username"
+                value={userInfo.username}
+                onChange={changeHandle}
                 rules={[
                   {
                     required: true,
@@ -91,6 +117,6 @@ export default function Login() {
           </Row>
         </Content>
       </Layout>
-    </div>
+    </div >
   );
 }
