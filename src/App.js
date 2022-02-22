@@ -2,7 +2,7 @@ import "./App.css";
 import "antd/dist/antd.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Register from "./components/Register/Register";
-import Footer from "./components/Footer/Footer.js"
+import Footer from "./components/Footer/Footer.js";
 import Navbar from "./components/Navbar/Navbar";
 import Homepage from "./components/Homepage/Homepage";
 import Login from "./components/Login/Login";
@@ -12,7 +12,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-      <Navbar />
+        <Navbar />
         <Routes>
           <Route exact path="/" element={<Homepage />}></Route>
           <Route exact path="/signup" element={<Register />}></Route>
@@ -21,7 +21,7 @@ function App() {
         </Routes>
         <Footer />
       </div>
-    </Router >
+    </Router>
   );
 }
 
