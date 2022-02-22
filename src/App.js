@@ -1,18 +1,20 @@
 import "./App.css";
 import Navbar from "./components/Navbar";
+import Homepage from "./components/Homepage";
 import Login from "./components/Login";
 import Profile from "./components/Profile/Profile.js";
 import "antd/dist/antd.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Register from "./components/Register";
-
 import Footer from "./components/Footer/Footer.js"
+
 function App() {
   return (
     <Router>
       <div className="App">
+      <Navbar />
         <Routes>
-          <Route exact path="/" element={<Navbar />}></Route>
+          <Route exact path="/" element={<Homepage />}></Route>
           <Route exact path="/signup" element={<Register />}></Route>
           <Route exact path="/login" element={<Login />}></Route>
           <Route path="/profile" element={<Profile />}></Route>

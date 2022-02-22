@@ -1,13 +1,14 @@
 import React, { Component } from "react";
-import Navbar from "./Navbar";
-
+import { Layout } from "antd";
+const { Content } = Layout;
 
 class Homepage extends Component {
   render() {
     return (
       <div>
-        <Navbar />
-
+        <Layout>
+          <Content style={{ minHeight: "100vh" }}></Content>
+        </Layout>
       </div>
     );
   }
