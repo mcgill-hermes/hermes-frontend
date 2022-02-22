@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { register } from "../../actions/auth";
-import Navbar from '../Navbar/Navbar';
 import {
   Form,
   Input,
@@ -68,7 +67,6 @@ const Register = () => {
 
   return (
     <div>
-      <Navbar />
       <Layout>
         <Layout>
           <Row
