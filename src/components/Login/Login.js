@@ -1,37 +1,42 @@
 import React, { useState } from "react";
-import { Navigate } from 'react-router-dom';
-import { Layout, Form, Button, Input, Checkbox, Row } from "antd";
+import { Navigate } from "react-router-dom";
+import { Layout, Form, Button, Input, Checkbox, Row, Space } from "antd";
 import "./Login.css";
-import Navbar from "./Navbar";
+import { useNavigate } from "react-router-dom";
 
 const { Content } = Layout;
 
 export default function Login() {
   const [userInfo, setUserInfo] = useState({
-    username: ''
-  })
+    username: "",
+  });
+  const history = useNavigate();
   const [redirect, setRedirect] = useState(false);
   if (redirect) {
-    var data = JSON.stringify(userInfo)
-    return <Navigate push to={{
-      pathname: "/profile",
-      state: { username: userInfo }
-
-    }} />
-
+    var data = JSON.stringify(userInfo);
+    return (
+      <Navigate
+        push
+        to={{
+          pathname: "/profile",
+          state: { username: userInfo },
+        }}
+      />
+    );
   }
+
   const onFinish = (values) => {
     console.log("Success:", values);
-    setRedirect(true)
+    setRedirect(true);
   };
   //get the username need for profile
-  const changeHandle = e => {
+  const changeHandle = (e) => {
     setUserInfo({
       ...userInfo,
-      [e.target.name]: e.target.value
-    })
-    console.log(userInfo)
-  }
+      [e.target.name]: e.target.value,
+    });
+    console.log(userInfo);
+  };
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -39,7 +44,6 @@ export default function Login() {
 
   return (
     <div className="Login">
-      <Navbar />
       <Layout>
         <Content>
           <Row
@@ -109,14 +113,23 @@ export default function Login() {
                   span: 16,
                 }}
               >
-                <Button type="primary" htmlType="submit">
-                  Submit
-                </Button>
+                <Space>
+                  <Button type="primary" htmlType="submit">
+                    Login
+                  </Button>
+
+                  <Button
+                    type="primary"
+                    onClick={() => history("/signup")}
+                  >
+                    Sign up
+                  </Button>
+                </Space>
               </Form.Item>
             </Form>
           </Row>
         </Content>
       </Layout>
-    </div >
+    </div>
   );
 }
