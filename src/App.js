@@ -1,11 +1,11 @@
 import "./App.css";
-import Navbar from "./components/Navbar";
-import Homepage from "./components/Homepage";
-import Login from "./components/Login";
+import Navbar from "./components/Navbar/Navbar";
+import Homepage from "./components/Homepage/Homepage";
+import Login from "./components/Login/Login";
 import Profile from "./components/Profile/Profile.js";
 import "antd/dist/antd.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Register from "./components/Register";
+import Register from "./components/Register/Register";
 import Footer from "./components/Footer/Footer.js"
 
 function App() {

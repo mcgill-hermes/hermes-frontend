@@ -3,8 +3,8 @@ import { Navigate } from 'react-router-dom';
 import profileImage from '../../assets/images/profile.webp'
 import './Profile.css'
 import Footer from "../Footer/Footer"
-import '../Navbar'
-import Navbar from '../Navbar'
+import '../Navbar/Navbar'
+import Navbar from '../Navbar/Navbar'
 import { Button, Typography } from "antd";
 import { signingOut } from "../../api/UserApi";
 const Profile = () => {

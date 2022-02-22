@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { register } from "../actions/auth";
-import Navbar from './Navbar';
+import { register } from "../../actions/auth";
+import Navbar from '../Navbar/Navbar';
 import {
   Form,
   Input,

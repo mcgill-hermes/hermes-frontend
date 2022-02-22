@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import { Layout, Form, Button, Input, Checkbox, Row, Space } from "antd";
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
-import Navbar from "./Navbar";
+import Navbar from "../Navbar/Navbar";
 
 const { Content } = Layout;
 
