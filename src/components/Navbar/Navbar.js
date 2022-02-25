@@ -30,7 +30,9 @@ class Navbar extends Component {
                     Login
                   </Link>
                 ) : (
-                  <p>{username}</p>
+                  <Link to="/profile" className="profile">
+                    {username}
+                  </Link>
                 )}
               </Col>
               <Col span={3}></Col>
