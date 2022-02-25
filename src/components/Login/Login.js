@@ -43,12 +43,12 @@ export default function Login() {
     fetch("http://localhost:8080/auth/login", requestOptions)
       .then(() => {
         localStorage.setItem("username", values.username);
+        setRedirect(true);
+        window.location.reload();
       })
       .catch((error) => {
         console.log(error);
       });
-    setRedirect(true);
-    window.location.reload();
   };
 
   //get the username need for profile
