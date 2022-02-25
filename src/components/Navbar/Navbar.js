@@ -6,9 +6,11 @@ const { Header } = Layout;
 
 class Navbar extends Component {
   render() {
+    const username = localStorage.getItem("username");
+
     return (
       <div>
-        <Layout style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+        <Layout style={{ position: "fixed", zIndex: 1, width: "100%" }}>
           <Header className="header">
             <Row>
               <Col span={3}></Col>
@@ -23,7 +25,15 @@ class Navbar extends Component {
                 </div>
               </Col>
               <Col span={2}>
-                <Link to="/login" className="login">Login</Link>
+                {!username ? (
+                  <Link to="/login" className="login">
+                    Login
+                  </Link>
+                ) : (
+                  <Link to="/profile" className="profile">
+                    {username}
+                  </Link>
+                )}
               </Col>
               <Col span={3}></Col>
             </Row>

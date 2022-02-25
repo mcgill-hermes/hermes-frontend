@@ -10,6 +10,7 @@ export default function Login() {
   const [userInfo, setUserInfo] = useState({
     username: "",
   });
+  const [password, setPassword] = useState({ password: "" });
   const history = useNavigate();
   const [redirect, setRedirect] = useState(false);
   if (redirect) {
@@ -27,15 +28,42 @@ export default function Login() {
 
   const onFinish = (values) => {
     console.log("Success:", values);
-    setRedirect(true);
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "*/*",
+      },
+      body: JSON.stringify({
+        userName: values.username,
+        password: values.password,
+      }),
+    };
+
+    fetch("http://localhost:8080/auth/login", requestOptions)
+      .then(() => {
+        localStorage.setItem("username", values.username);
+        setRedirect(true);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
+
   //get the username need for profile
   const changeHandle = (e) => {
     setUserInfo({
       ...userInfo,
       [e.target.name]: e.target.value,
     });
-    console.log(userInfo);
+  };
+
+  const handlePwd = (e) => {
+    setPassword({
+      ...password,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -86,6 +114,8 @@ export default function Login() {
               <Form.Item
                 label="Password"
                 name="password"
+                value={password}
+                onChange={handlePwd}
                 rules={[
                   {
                     required: true,
@@ -118,10 +148,7 @@ export default function Login() {
                     Login
                   </Button>
 
-                  <Button
-                    type="primary"
-                    onClick={() => history("/signup")}
-                  >
+                  <Button type="primary" onClick={() => history("/signup")}>
                     Sign up
                   </Button>
                 </Space>
