@@ -1,14 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { register } from "../../actions/auth";
-import {
-  Form,
-  Input,
-  Alert,
-  Button,
-  Layout,
-  Row
-} from 'antd';
+import { Form, Input, Alert, Button, Layout, Row } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const formItemLayout = {
   labelCol: {
@@ -41,29 +35,48 @@ const tailFormItemLayout = {
   },
 };
 
-
-
 const Register = () => {
+  const history = useNavigate();
   const [form] = Form.useForm();
   const [successful, setSuccessful] = useState(false);
 
-  const { message } = useSelector(state => state.message);
-  const dispatch = useDispatch();
-
-
+  const { message } = useSelector((state) => state.message);
+  // const dispatch = useDispatch();
 
   const onFinish = (values) => {
-    setSuccessful(false);
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        Accept: "*",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        userName: values.username,
+        password: values.password,
+        firstName: values.firstname,
+        lastName: values.lastname,
+      }),
+    };
+    fetch("http://localhost:8080/auth/signup", requestOptions).then(
+      (response) => {
+        console.log(response);
+        localStorage.setItem("username", values.username);
+        history("/");
+        window.location.reload();
+      }
+    );
 
-    dispatch(register(values.username, values.password))
-      .then(() => {
-        setSuccessful(true);
-      })
-      .catch(() => {
-        setSuccessful(false);
-      });
+    // setSuccessful(false);
+
+    // dispatch(register(values.username, values.password))
+    //   .then(() => {
+    //     setSuccessful(true);
+    //   })
+    //   .catch(() => {
+    //     setSuccessful(false);
+    //   });
   };
-
 
   return (
     <div>
@@ -82,6 +95,28 @@ const Register = () => {
               onFinish={onFinish}
               scrollToFirstError
             >
+              <Form.Item
+                name="lastname"
+                label="Last Nname"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name="firstname"
+                label="First name"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
 
               <Form.Item
                 name="username"
@@ -101,12 +136,12 @@ const Register = () => {
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your password!',
+                    message: "Please input your password!",
                   },
                   {
                     max: 20,
-                    min: 4
-                  }
+                    min: 4,
+                  },
                 ]}
                 hasFeedback
               >
@@ -116,20 +151,24 @@ const Register = () => {
               <Form.Item
                 name="confirm"
                 label="Confirm Password"
-                dependencies={['password']}
+                dependencies={["password"]}
                 hasFeedback
                 rules={[
                   {
                     required: true,
-                    message: 'Please confirm your password!',
+                    message: "Please confirm your password!",
                   },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
-                      if (!value || getFieldValue('password') === value) {
+                      if (!value || getFieldValue("password") === value) {
                         return Promise.resolve();
                       }
 
-                      return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                      return Promise.reject(
+                        new Error(
+                          "The two passwords that you entered do not match!"
+                        )
+                      );
                     },
                   }),
                 ]}
@@ -141,12 +180,12 @@ const Register = () => {
                 <Button type="primary" htmlType="submit">
                   Register
                 </Button>
-                {message && successful &&
-                  (<Alert message={message} type="success" showIcon />)
-                }
-                {message && !successful &&
-                  (<Alert message={message} type="error" showIcon />)
-                }
+                {message && successful && (
+                  <Alert message={message} type="success" showIcon />
+                )}
+                {message && !successful && (
+                  <Alert message={message} type="error" showIcon />
+                )}
               </Form.Item>
             </Form>
           </Row>
