@@ -5,23 +5,37 @@ const { Content } = Layout;
 const { CheckableTag } = Tag;
 
 class Preference extends React.Component {
-  state = {
-    selectedTags: ["Technology", "Finance & Economics"],
-  };
+  constructor(props) {
+    super(props);
+    this.state = {selectedTags: [], tagsData: []};
+    this.click = this.click.bind(this);
+  }
 
-  tagsData = [
-    "Technology",
-    "Finance & Economics",
-    "Entertainment",
-    "Science",
-    "Politics",
-    "Health",
-    "Covid",
-    "US",
-    "Canada",
-    "China",
-    "Sports",
-  ];
+  componentDidMount() {
+    const requestOptions = {
+      method: "GET",
+    };
+    fetch("http://localhost:8080/category/get", requestOptions).then(
+      (response) => {
+        if (response.ok) {
+          response.text().then(
+            (data) => {
+              const tags = JSON.parse(data).map(o => o["type"])
+              this.setState({
+                tagsData: tags
+              })         
+            }
+          )
+        } else {
+          console.log(response)
+        }
+      }
+    )
+
+    const userPreference = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).preference: [];
+    const userPrefernceExtracted = userPreference.map(e => e["type"])
+    this.state.selectedTags = userPrefernceExtracted; 
+  };
 
   handleChange(tag, checked) {
     const { selectedTags } = this.state;
@@ -33,13 +47,44 @@ class Preference extends React.Component {
   }
 
   click(e) {
-    // TODO: save preference
-    localStorage.setItem("preference", true);
-    window.location.reload();
+    const tags = this.state.selectedTags.map(e => {
+      return {"type" : e}
+    })
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        Accept: "*",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        userName: JSON.parse(localStorage.getItem("user")).userName,
+        preference: tags
+      }),
+    };
+    fetch("http://localhost:8080/myaccount/editinformation", requestOptions).then(
+      (response) => {
+        if (response.ok) {
+          response.text().then(
+            (data) => {
+              const user = JSON.parse(data);
+              delete user.password;
+              localStorage.setItem("user", JSON.stringify(user));
+              window.location.reload();
+            }
+          )
+        } else {
+          response.text().then(
+            (data) => {
+              console.log(data)
+            }
+          )
+        }
+      }
+    )
   }
 
   render() {
-    const { selectedTags } = this.state;
     return (
       <div>
         <Layout>
@@ -51,7 +96,7 @@ class Preference extends React.Component {
               style={{ minHeight: "100vh" }}
             >
               <Card
-                title="Welcome, select 2 or more news topics to get started"
+                title="Please select 2 or more news topics"
                 bordered={false}
                 style={{
                   width: 600,
@@ -59,11 +104,11 @@ class Preference extends React.Component {
                   backgroundColor: "rgba(255, 255, 255, 0.0)",
                 }}
               >
-                {this.tagsData.map((tag) => (
+                {this.state.tagsData.map((tag) => (
                   <CheckableTag
                     key={tag}
                     style={{ margin: "12px" }}
-                    checked={selectedTags.indexOf(tag) > -1}
+                    checked={this.state.selectedTags.indexOf(tag) > -1}
                     onChange={(checked) => this.handleChange(tag, checked)}
                   >
                     {tag}

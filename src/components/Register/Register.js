@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { register } from "../../actions/auth";
 import { Form, Input, Alert, Button, Layout, Row } from "antd";
 import { useNavigate } from "react-router-dom";
 
