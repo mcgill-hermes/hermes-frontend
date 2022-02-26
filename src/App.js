@@ -8,6 +8,7 @@ import Homepage from "./components/Homepage/Homepage";
 import Login from "./components/Login/Login";
 import Profile from "./components/Profile/Profile.js";
 import News from "./components/News/News";
+import Preference from "./components/Preference/Preference";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={<Homepage />}></Route>
           <Route exact path="/news" element={<News />}></Route>
+          <Route exact path="/preference" element={<Preference />}></Route>
           <Route exact path="/signup" element={<Register />}></Route>
           <Route exact path="/login" element={<Login />}></Route>
           <Route path="/profile" element={<Profile />}></Route>
