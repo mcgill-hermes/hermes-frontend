@@ -5,18 +5,12 @@ import "./Navbar.css";
 const { Header } = Layout;
 
 class Navbar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  redirectLogin() {
-    this.props.history.push("/login");
-  }
   render() {
+    const user = localStorage.getItem("user");
+    let userName = user ? JSON.parse(user).userName : null;
     return (
       <div>
-        <Layout>
+        <Layout style={{ position: "fixed", zIndex: 1, width: "100%" }}>
           <Header className="header">
             <Row>
               <Col span={3}></Col>
@@ -25,14 +19,21 @@ class Navbar extends Component {
                   <Link to="/">Hermes</Link>
                 </div>
               </Col>
-              <Col span={12}>
+              <Col span={13}>
                 <div className="news">
                   <Link to="/news">News</Link>
                 </div>
               </Col>
-              <Col span={3}>
-                <Link to="/signup" className="signup">Sign up</Link>
-                <Link to="/login" className="login">Login</Link>
+              <Col span={2}>
+                {!userName ? (
+                  <Link to="/login" className="login">
+                    Login
+                  </Link>
+                ) : (
+                  <Link to="/profile" className="profile">
+                    {userName}
+                  </Link>
+                )}
               </Col>
               <Col span={3}></Col>
             </Row>

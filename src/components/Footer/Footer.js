@@ -8,7 +8,6 @@ function Footer() {
         <div className="containerA">
             <Typography style={{ color: 'white' }} className="text"> Hermes</Typography>
             <Typography style={{ color: 'grey' }} className="text"> Copyright 2022 Hermes</Typography>
-
         </div>
     );
 

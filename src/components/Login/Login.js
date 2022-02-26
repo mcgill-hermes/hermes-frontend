@@ -1,37 +1,72 @@
 import React, { useState } from "react";
-import { Navigate } from 'react-router-dom';
-import { Layout, Form, Button, Input, Checkbox, Row } from "antd";
+import { Navigate } from "react-router-dom";
+import { Layout, Form, Button, Input, Checkbox, Row, Space, Alert } from "antd";
 import "./Login.css";
-import Navbar from "./Navbar";
+import { useNavigate } from "react-router-dom";
 
 const { Content } = Layout;
 
 export default function Login() {
   const [userInfo, setUserInfo] = useState({
-    username: ''
-  })
-  const [redirect, setRedirect] = useState(false);
-  if (redirect) {
-    var data = JSON.stringify(userInfo)
-    return <Navigate push to={{
-      pathname: "/profile",
-      state: { username: userInfo }
+    username: "",
+  });
+  const [password, setPassword] = useState({ password: "" });
+  const history = useNavigate();
+  const [successful, setSuccessful] = useState(false);
+  const [message, setMessage] = useState();
 
-    }} />
-
-  }
   const onFinish = (values) => {
     console.log("Success:", values);
-    setRedirect(true)
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "*/*",
+      },
+      body: JSON.stringify({
+        userName: values.username,
+        password: values.password,
+      }),
+    };
+
+    fetch("http://localhost:8080/auth/login", requestOptions).then(
+      (response) => {
+        if (response.ok) {
+          response.text().then(
+            (data) => {
+              const user = JSON.parse(data);
+              delete user.password;
+              localStorage.setItem("user", JSON.stringify(user));
+              history("/");
+              window.location.reload();
+            }
+          )
+        } else {
+          response.text().then(
+            (data) => {
+              setSuccessful(false)
+              setMessage(data);
+            }
+          )
+        }
+      }
+    )
   };
+
   //get the username need for profile
-  const changeHandle = e => {
+  const changeHandle = (e) => {
     setUserInfo({
       ...userInfo,
-      [e.target.name]: e.target.value
-    })
-    console.log(userInfo)
-  }
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handlePwd = (e) => {
+    setPassword({
+      ...password,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -39,7 +74,6 @@ export default function Login() {
 
   return (
     <div className="Login">
-      <Navbar />
       <Layout>
         <Content>
           <Row
@@ -82,6 +116,8 @@ export default function Login() {
               <Form.Item
                 label="Password"
                 name="password"
+                value={password}
+                onChange={handlePwd}
                 rules={[
                   {
                     required: true,
@@ -109,14 +145,26 @@ export default function Login() {
                   span: 16,
                 }}
               >
-                <Button type="primary" htmlType="submit">
-                  Submit
-                </Button>
+                <Space>
+                  <Button type="primary" htmlType="submit">
+                    Login
+                  </Button>
+
+                  <Button type="primary" onClick={() => history("/signup")}>
+                    Sign up
+                  </Button>
+                </Space>
+                {message && successful && (
+                  <Alert message={message} type="success" showIcon />
+                )}
+                {message && !successful && (
+                  <Alert message={message} type="error" showIcon />
+                )}
               </Form.Item>
             </Form>
           </Row>
         </Content>
       </Layout>
-    </div >
+    </div>
   );
 }
