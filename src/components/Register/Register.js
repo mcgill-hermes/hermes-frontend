@@ -81,115 +81,113 @@ const Register = () => {
   return (
     <div>
       <Layout>
-        <Layout>
-          <Row
-            type="flex"
-            justify="center"
-            align="middle"
-            style={{ minHeight: "100vh" }}
+        <Row
+          type="flex"
+          justify="center"
+          align="middle"
+          style={{ minHeight: "100vh" }}
+        >
+          <Form
+            {...formItemLayout}
+            form={form}
+            name="register"
+            onFinish={onFinish}
+            scrollToFirstError
           >
-            <Form
-              {...formItemLayout}
-              form={form}
-              name="register"
-              onFinish={onFinish}
-              scrollToFirstError
+            <Form.Item
+              name="lastname"
+              label="Last Nname"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
             >
-              <Form.Item
-                name="lastname"
-                label="Last Nname"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                name="firstname"
-                label="First name"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="firstname"
+              label="First name"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
 
-              <Form.Item
-                name="username"
-                label="Username"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
+            <Form.Item
+              name="username"
+              label="Username"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
 
-              <Form.Item
-                name="password"
-                label="Password"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your password!",
-                  },
-                  {
-                    max: 20,
-                    min: 4,
-                  },
-                ]}
-                hasFeedback
-              >
-                <Input.Password />
-              </Form.Item>
+            <Form.Item
+              name="password"
+              label="Password"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your password!",
+                },
+                {
+                  max: 20,
+                  min: 4,
+                },
+              ]}
+              hasFeedback
+            >
+              <Input.Password />
+            </Form.Item>
 
-              <Form.Item
-                name="confirm"
-                label="Confirm Password"
-                dependencies={["password"]}
-                hasFeedback
-                rules={[
-                  {
-                    required: true,
-                    message: "Please confirm your password!",
+            <Form.Item
+              name="confirm"
+              label="Confirm Password"
+              dependencies={["password"]}
+              hasFeedback
+              rules={[
+                {
+                  required: true,
+                  message: "Please confirm your password!",
+                },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("password") === value) {
+                      return Promise.resolve();
+                    }
+
+                    return Promise.reject(
+                      new Error(
+                        "The two passwords that you entered do not match!"
+                      )
+                    );
                   },
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
-                      if (!value || getFieldValue("password") === value) {
-                        return Promise.resolve();
-                      }
+                }),
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
 
-                      return Promise.reject(
-                        new Error(
-                          "The two passwords that you entered do not match!"
-                        )
-                      );
-                    },
-                  }),
-                ]}
-              >
-                <Input.Password />
-              </Form.Item>
-
-              <Form.Item {...tailFormItemLayout}>
-                <Button type="primary" htmlType="submit">
-                  Register
-                </Button>
-                {message && successful && (
-                  <Alert message={message} type="success" showIcon />
-                )}
-                {message && !successful && (
-                  <Alert message={message} type="error" showIcon />
-                )}
-              </Form.Item>
-            </Form>
-          </Row>
-        </Layout>
+            <Form.Item {...tailFormItemLayout}>
+              <Button type="primary" htmlType="submit">
+                Register
+              </Button>
+              {message && successful && (
+                <Alert message={message} type="success" showIcon />
+              )}
+              {message && !successful && (
+                <Alert message={message} type="error" showIcon />
+              )}
+            </Form.Item>
+          </Form>
+        </Row>
       </Layout>
     </div>
   );
