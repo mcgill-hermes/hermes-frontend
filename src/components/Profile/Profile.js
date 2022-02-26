@@ -5,6 +5,9 @@ import "./Profile.css";
 import { Button, Typography } from "antd";
 import { signingOut } from "../../api/UserApi";
 import { useNavigate } from "react-router-dom";
+import { Layout, Space } from "antd";
+
+const { Content } = Layout;
 
 const Profile = () => {
   const [redirect, setRedirect] = useState(false);
@@ -17,24 +20,40 @@ const Profile = () => {
     history("/");
     window.location.reload();
   }
+  const username = localStorage.getItem("username");
 
   const profileAuthed = (
     <>
       <div className="container">
-        <img className="icon" src={profileImage} alt="" align="center" />
-        <Typography className="text">Username:.username</Typography>
-        <Typography className="text">Email:</Typography>
-        <Typography className="text">Joined:</Typography>
-        <Typography className="text"> Preferrence:</Typography>
-        <Button type="primary" htmlType="sign out" onClick={signOutHandle}>
-          SIGN OUT
-        </Button>
+        <Layout>
+          <Content
+            type="flex"
+            align="middle"
+            style={{ minHeight: "100vh", minWidth: "100vw" }}
+          >
+            <img
+              className="icon"
+              src={profileImage}
+              alt=""
+              align="center"
+              style={{ width: "80px", marginTop: "15%", marginBottom: "3%" }}
+            />
+            <div>
+              <p className="text">Username: {username}</p>
+              <p className="text"> Preferrence:</p>
+            </div>
+            <Space>
+              <Button>Edit preference</Button>
+              <Button type="primary" onClick={signOutHandle}>SIGN OUT</Button>
+            </Space>
+          </Content>
+        </Layout>
       </div>
     </>
   );
   return (
     <div>
-      <div className="layout">{profileAuthed}</div>
+      <div>{profileAuthed}</div>
     </div>
   );
 };
