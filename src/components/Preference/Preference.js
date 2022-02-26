@@ -70,7 +70,7 @@ class Preference extends React.Component {
                   </CheckableTag>
                 ))}
                 <p className="button">
-                  <Button onClick={this.click}>Continue</Button>
+                  <Button onClick={this.click}>Confirm</Button>
                 </p>
               </Card>
             </Row>

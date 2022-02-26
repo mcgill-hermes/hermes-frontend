@@ -43,8 +43,12 @@ const Profile = () => {
               <p className="text"> Preferrence:</p>
             </div>
             <Space>
-              <Button>Edit preference</Button>
-              <Button type="primary" onClick={signOutHandle}>SIGN OUT</Button>
+              <Button onClick={() => history("/preference")}>
+                Edit preference
+              </Button>
+              <Button type="primary" onClick={signOutHandle}>
+                SIGN OUT
+              </Button>
             </Space>
           </Content>
         </Layout>
