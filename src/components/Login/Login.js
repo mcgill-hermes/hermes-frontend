@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
-import { Layout, Form, Button, Input, Checkbox, Row, Space } from "antd";
+import { Layout, Form, Button, Input, Checkbox, Row, Space, Alert } from "antd";
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
 
@@ -12,19 +12,8 @@ export default function Login() {
   });
   const [password, setPassword] = useState({ password: "" });
   const history = useNavigate();
-  const [redirect, setRedirect] = useState(false);
-  if (redirect) {
-    var data = JSON.stringify(userInfo);
-    return (
-      <Navigate
-        push
-        to={{
-          pathname: "/profile",
-          state: { username: userInfo },
-        }}
-      />
-    );
-  }
+  const [successful, setSuccessful] = useState(false);
+  const [message, setMessage] = useState();
 
   const onFinish = (values) => {
     console.log("Success:", values);
@@ -40,15 +29,28 @@ export default function Login() {
       }),
     };
 
-    fetch("http://localhost:8080/auth/login", requestOptions)
-      .then(() => {
-        localStorage.setItem("username", values.username);
-        setRedirect(true);
-        window.location.reload();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    fetch("http://localhost:8080/auth/login", requestOptions).then(
+      (response) => {
+        if (response.ok) {
+          response.text().then(
+            (data) => {
+              const user = JSON.parse(data);
+              delete user.password;
+              localStorage.setItem("user", JSON.stringify(user));
+              history("/");
+              window.location.reload();
+            }
+          )
+        } else {
+          response.text().then(
+            (data) => {
+              setSuccessful(false)
+              setMessage(data);
+            }
+          )
+        }
+      }
+    )
   };
 
   //get the username need for profile
@@ -152,6 +154,12 @@ export default function Login() {
                     Sign up
                   </Button>
                 </Space>
+                {message && successful && (
+                  <Alert message={message} type="success" showIcon />
+                )}
+                {message && !successful && (
+                  <Alert message={message} type="error" showIcon />
+                )}
               </Form.Item>
             </Form>
           </Row>

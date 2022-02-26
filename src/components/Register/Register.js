@@ -40,7 +40,7 @@ const Register = () => {
   const [form] = Form.useForm();
   const [successful, setSuccessful] = useState(false);
 
-  const { message } = useSelector((state) => state.message);
+  const [message, setMessage] = useState();
   // const dispatch = useDispatch();
 
   const onFinish = (values) => {
@@ -60,22 +60,26 @@ const Register = () => {
     };
     fetch("http://localhost:8080/auth/signup", requestOptions).then(
       (response) => {
-        console.log(response);
-        localStorage.setItem("username", values.username);
-        history("/");
-        window.location.reload();
+        if (response.ok) {
+          response.text().then(
+            (data) => {
+              const user = JSON.parse(data);
+              delete user.password;
+              localStorage.setItem("user", JSON.stringify(user));
+              history("/");
+              window.location.reload();
+            }
+          )
+        } else {
+          response.text().then(
+            (data) => {
+              setSuccessful(false)
+              setMessage(data);
+            }
+          )
+        }
       }
-    );
-
-    // setSuccessful(false);
-
-    // dispatch(register(values.username, values.password))
-    //   .then(() => {
-    //     setSuccessful(true);
-    //   })
-    //   .catch(() => {
-    //     setSuccessful(false);
-    //   });
+    )
   };
 
   return (
@@ -96,7 +100,7 @@ const Register = () => {
           >
             <Form.Item
               name="lastname"
-              label="Last Nname"
+              label="Last Name"
               rules={[
                 {
                   required: true,
