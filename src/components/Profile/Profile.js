@@ -20,7 +20,8 @@ const Profile = () => {
     history("/");
     window.location.reload();
   }
-  const username = localStorage.getItem("username");
+  const user = localStorage.getItem("user");
+  const username = user ? JSON.parse(user).userName : null;
 
   const profileAuthed = (
     <>
@@ -40,7 +41,6 @@ const Profile = () => {
             />
             <div>
               <p className="text">Username: {username}</p>
-              <p className="text"> Preferrence:</p>
             </div>
             <Space>
               <Button onClick={() => history("/preference")}>
