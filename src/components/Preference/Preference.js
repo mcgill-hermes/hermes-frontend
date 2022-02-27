@@ -15,12 +15,12 @@ class Preference extends React.Component {
     const requestOptions = {
       method: "GET",
     };
-    fetch("http://localhost:8080/category/get", requestOptions).then(
+    fetch("http://localhost:8080/category/types", requestOptions).then(
       (response) => {
         if (response.ok) {
           response.text().then(
             (data) => {
-              const tags = JSON.parse(data).map(o => o["type"])
+              const tags = JSON.parse(data)
               this.setState({
                 tagsData: tags
               })         
