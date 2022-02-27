@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Layout, Row, Card, Tag } from "antd";
+import { Link } from "react-router-dom";
 import "./Preference.css";
 const { Content } = Layout;
 const { CheckableTag } = Tag;
@@ -7,7 +8,7 @@ const { CheckableTag } = Tag;
 class Preference extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {selectedTags: [], tagsData: []};
+    this.state = { selectedTags: [], tagsData: [] };
     this.click = this.click.bind(this);
   }
 
@@ -18,24 +19,24 @@ class Preference extends React.Component {
     fetch("http://localhost:8080/category/types", requestOptions).then(
       (response) => {
         if (response.ok) {
-          response.text().then(
-            (data) => {
-              const tags = JSON.parse(data)
-              this.setState({
-                tagsData: tags
-              })         
-            }
-          )
+          response.text().then((data) => {
+            const tags = JSON.parse(data);
+            this.setState({
+              tagsData: tags,
+            });
+          });
         } else {
-          console.log(response)
+          console.log(response);
         }
       }
-    )
+    );
 
-    const userPreference = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).preference: [];
-    const userPrefernceExtracted = userPreference.map(e => e["type"])
-    this.state.selectedTags = userPrefernceExtracted; 
-  };
+    const userPreference = localStorage.getItem("user")
+      ? JSON.parse(localStorage.getItem("user")).preference
+      : [];
+    const userPrefernceExtracted = userPreference.map((e) => e["type"]);
+    this.state.selectedTags = userPrefernceExtracted;
+  }
 
   handleChange(tag, checked) {
     const { selectedTags } = this.state;
@@ -47,9 +48,9 @@ class Preference extends React.Component {
   }
 
   click(e) {
-    const tags = this.state.selectedTags.map(e => {
-      return {"type" : e}
-    })
+    const tags = this.state.selectedTags.map((e) => {
+      return { type: e };
+    });
     const requestOptions = {
       method: "POST",
       headers: {
@@ -59,29 +60,26 @@ class Preference extends React.Component {
       },
       body: JSON.stringify({
         userName: JSON.parse(localStorage.getItem("user")).userName,
-        preference: tags
+        preference: tags,
       }),
     };
-    fetch("http://localhost:8080/myaccount/editinformation", requestOptions).then(
-      (response) => {
-        if (response.ok) {
-          response.text().then(
-            (data) => {
-              const user = JSON.parse(data);
-              delete user.password;
-              localStorage.setItem("user", JSON.stringify(user));
-              window.location.reload();
-            }
-          )
-        } else {
-          response.text().then(
-            (data) => {
-              console.log(data)
-            }
-          )
-        }
+    fetch(
+      "http://localhost:8080/myaccount/editinformation",
+      requestOptions
+    ).then((response) => {
+      if (response.ok) {
+        response.text().then((data) => {
+          const user = JSON.parse(data);
+          delete user.password;
+          localStorage.setItem("user", JSON.stringify(user));
+          window.location.reload();
+        });
+      } else {
+        response.text().then((data) => {
+          console.log(data);
+        });
       }
-    )
+    });
   }
 
   render() {
@@ -115,7 +113,9 @@ class Preference extends React.Component {
                   </CheckableTag>
                 ))}
                 <p className="button">
-                  <Button onClick={this.click}>Confirm</Button>
+                  <Link to="/news">
+                    <Button onClick={this.click}>Confirm</Button>
+                  </Link>
                 </p>
               </Card>
             </Row>
