@@ -1,6 +1,6 @@
 import React from "react";
-import { Layout, Row, Col } from "antd";
-import { Tabs, Card, Spin } from "antd";
+import { Layout, Row } from "antd";
+import { Tabs, Card } from "antd";
 import { useState, useEffect } from "react";
 
 const { TabPane } = Tabs;
