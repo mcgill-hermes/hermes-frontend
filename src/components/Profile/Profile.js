@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
 import profileImage from "../../assets/images/profile.webp";
 import "./Profile.css";
-import { Button, Typography } from "antd";
-import { signingOut } from "../../api/UserApi";
+import { Button, Input, Modal} from "antd";
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+
 import { useNavigate } from "react-router-dom";
 import { Layout, Space } from "antd";
 
@@ -22,6 +22,63 @@ const Profile = () => {
   }
   const user = localStorage.getItem("user");
   const username = user ? JSON.parse(user).userName : null;
+
+  const [modelVisible, setModelVisible] = React.useState(false);
+  const [showWarning, setShowWarning] = React.useState(false);
+  const [confirmLoading, setConfirmLoading] = React.useState(false);
+  const [password, setPassword] = React.useState();
+  const [warning, setWarning] = React.useState();
+
+  const showModal = () => {
+    setModelVisible(true);
+  };
+
+  const handleOnDeleteOk = () => {
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        Accept: "*",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
+    };
+    fetch("http://localhost:8080/user/delete", requestOptions).then(
+      (response) => {
+        if (response.ok) {
+          response.text().then(
+            (data) => {
+              localStorage.removeItem("user");
+              handleOnDeleteCancel();
+              history("/");
+              window.location.reload();
+            }
+          )
+        } else {
+          response.text().then(
+            (data) => {
+              setWarning(data);
+              setShowWarning(true)
+            }
+          )
+        }
+      },
+      (error) => {
+        setWarning(error.message);
+        setShowWarning(true);
+      }
+    )
+  };
+
+  const handleOnDeleteCancel = () => {
+    setModelVisible(false);
+    setPassword(null);
+    setShowWarning(false);
+    setWarning("")
+  };
 
   const profileAuthed = (
     <>
@@ -42,16 +99,31 @@ const Profile = () => {
             <div>
               <p className="text">Username: {username}</p>
             </div>
-            <Space>
-              <Button onClick={() => history("/preference")}>
-                Edit preference
-              </Button>
-              <Button type="primary" onClick={signOutHandle}>
-                SIGN OUT
-              </Button>
+            <Space direction="vertical">
+                <Button onClick={() => history("/preference")}>
+                  Edit preference
+                </Button>
+                <Button type="danger" onClick={showModal}>
+                  Delete Account
+                </Button>
+                <Button block type="primary" onClick={signOutHandle}>
+                  Sign Out
+                </Button>
             </Space>
           </Content>
         </Layout>
+        <Modal
+          title="Delete Account"
+          visible={modelVisible}
+          onOk={handleOnDeleteOk}
+          confirmLoading={confirmLoading}
+          onCancel={handleOnDeleteCancel}
+        >
+          <p>Please confirm your password and click "OK" button</p>
+          <Input.Password placeholder="password" onChange={e => setPassword(e.target.value)} iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}>
+          </Input.Password>
+          { showWarning ? <p className="error" >{warning}</p> : null}
+        </Modal>
       </div>
     </>
   );

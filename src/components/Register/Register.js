@@ -64,7 +64,7 @@ const Register = () => {
               const user = JSON.parse(data);
               delete user.password;
               localStorage.setItem("user", JSON.stringify(user));
-              history("/");
+              history("/preference");
               window.location.reload();
             }
           )
@@ -76,6 +76,10 @@ const Register = () => {
             }
           )
         }
+      },
+      (error) => {
+        setSuccessful(false);
+        setMessage(error.message);
       }
     )
   };
