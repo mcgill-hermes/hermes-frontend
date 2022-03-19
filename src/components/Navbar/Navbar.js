@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Layout, Row, Col } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 const { Header } = Layout;
@@ -16,12 +17,16 @@ class Navbar extends Component {
               <Col span={3}></Col>
               <Col span={3}>
                 <div className="logo">
-                  <Link to="/">Hermes</Link>
+                  <Link to="/" className="logo-text">
+                    Hermes
+                  </Link>
                 </div>
               </Col>
               <Col span={13}>
                 <div className="news">
-                  <Link to="/news">News</Link>
+                  <Link to="/news" className="news-text">
+                    ● News
+                  </Link>
                 </div>
               </Col>
               <Col span={2}>
@@ -31,7 +36,7 @@ class Navbar extends Component {
                   </Link>
                 ) : (
                   <Link to="/profile" className="profile">
-                    {userName}
+                    <UserOutlined />
                   </Link>
                 )}
               </Col>

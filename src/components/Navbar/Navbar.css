@@ -1,11 +1,33 @@
-.header{
-    background-color: white !important;
+.header {
+  background-color: #020b4a !important;
 }
 
 .logo {
-    margin-left: 20%;
+  margin-left: 20%;
+}
+
+.logo-text {
+  color: #fff;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.news-text {
+  color: #fff;
+  font-size: 17px;
+  font-weight: bold;
 }
 
 .login {
-    margin-left: 20%;
+  margin-left: 25%;
+  color: #fff;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.profile {
+  margin-left: 25%;
+  color: #fff;
+  font-size: 17px;
+  font-weight: bold;
 }
