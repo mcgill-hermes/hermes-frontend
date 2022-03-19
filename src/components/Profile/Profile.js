@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import profileImage from "../../assets/images/profile.webp";
 import "./Profile.css";
-import { Button, Input, Modal} from "antd";
-import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { Button, Input, Modal } from "antd";
+import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 
 import { useNavigate } from "react-router-dom";
 import { Layout, Space } from "antd";
@@ -49,35 +49,31 @@ const Profile = () => {
     fetch("http://localhost:8080/user/delete", requestOptions).then(
       (response) => {
         if (response.ok) {
-          response.text().then(
-            (data) => {
-              localStorage.removeItem("user");
-              handleOnDeleteCancel();
-              history("/");
-              window.location.reload();
-            }
-          )
+          response.text().then((data) => {
+            localStorage.removeItem("user");
+            handleOnDeleteCancel();
+            history("/");
+            window.location.reload();
+          });
         } else {
-          response.text().then(
-            (data) => {
-              setWarning(data);
-              setShowWarning(true)
-            }
-          )
+          response.text().then((data) => {
+            setWarning(data);
+            setShowWarning(true);
+          });
         }
       },
       (error) => {
         setWarning(error.message);
         setShowWarning(true);
       }
-    )
+    );
   };
 
   const handleOnDeleteCancel = () => {
     setModelVisible(false);
     setPassword(null);
     setShowWarning(false);
-    setWarning("")
+    setWarning("");
   };
 
   const profileAuthed = (
@@ -100,15 +96,17 @@ const Profile = () => {
               <p className="text">Username: {username}</p>
             </div>
             <Space direction="vertical">
-                <Button onClick={() => history("/preference")}>
-                  Edit preference
-                </Button>
+              <Button onClick={() => history("/preference")}>
+                Edit preference
+              </Button>
+              <Space direction="horizontal" style={{ marginTop: "10%" }}>
                 <Button type="danger" onClick={showModal}>
                   Delete Account
                 </Button>
                 <Button block type="primary" onClick={signOutHandle}>
                   Sign Out
                 </Button>
+              </Space>
             </Space>
           </Content>
         </Layout>
@@ -120,9 +118,14 @@ const Profile = () => {
           onCancel={handleOnDeleteCancel}
         >
           <p>Please confirm your password and click "OK" button</p>
-          <Input.Password placeholder="password" onChange={e => setPassword(e.target.value)} iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}>
-          </Input.Password>
-          { showWarning ? <p className="error" >{warning}</p> : null}
+          <Input.Password
+            placeholder="password"
+            onChange={(e) => setPassword(e.target.value)}
+            iconRender={(visible) =>
+              visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+            }
+          ></Input.Password>
+          {showWarning ? <p className="error">{warning}</p> : null}
         </Modal>
       </div>
     </>
