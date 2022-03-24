@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Layout, Row, Col } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import { UserOutlined, StarOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 const { Header } = Layout;
@@ -40,7 +40,11 @@ class Navbar extends Component {
                   </Link>
                 )}
               </Col>
-              <Col span={3}></Col>
+              <Col span={3}>
+                <Link to="/admin" className="admin">
+                  <StarOutlined />
+                </Link>
+              </Col>
             </Row>
           </Header>
         </Layout>
