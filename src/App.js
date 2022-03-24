@@ -9,6 +9,7 @@ import Login from "./components/Login/Login";
 import Profile from "./components/Profile/Profile.js";
 import News from "./components/News/News";
 import Preference from "./components/Preference/Preference";
+import Admin from "./components/Admin/Admin";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route exact path="/signup" element={<Register />}></Route>
           <Route exact path="/login" element={<Login />}></Route>
           <Route path="/profile" element={<Profile />}></Route>
+          <Route path="/admin" element={<Admin />}></Route>
         </Routes>
         <Footer />
       </div>
