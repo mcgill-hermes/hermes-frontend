@@ -2,6 +2,7 @@ import React from "react";
 import { Layout, Row } from "antd";
 import { Tabs, Card } from "antd";
 import { useState, useEffect } from "react";
+import { LikeButton } from "../Like/like";
 
 const { TabPane } = Tabs;
 
@@ -100,6 +101,7 @@ export default function News() {
                           style={{ width: 800, marginTop: "10px" }}
                         >
                           <p>{element.content}</p>
+                          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "flex-end" }}><LikeButton key={Math.random().toString(36)} /> </div>
                         </Card>
                       );
                     })}
@@ -111,6 +113,6 @@ export default function News() {
         </Content>
         <Footer></Footer>
       </Layout>
-    </div>
+    </div >
   );
 }
