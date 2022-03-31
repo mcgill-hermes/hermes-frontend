@@ -25,7 +25,7 @@ const Profile = () => {
 
   const [modelVisible, setModelVisible] = React.useState(false);
   const [showWarning, setShowWarning] = React.useState(false);
-  const [confirmLoading, setConfirmLoading] = React.useState(false);
+  const [confirmLoading, ] = React.useState(false);
   const [password, setPassword] = React.useState();
   const [warning, setWarning] = React.useState();
 

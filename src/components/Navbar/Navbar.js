@@ -1,15 +1,23 @@
-import React, { Component } from "react";
-import { Layout, Row, Col } from "antd";
+import React from "react";
+import { Layout, Row, Col, Input } from "antd";
 import { UserOutlined, StarOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 import "./Navbar.css";
 const { Header } = Layout;
+const { Search } = Input;
 
-class Navbar extends Component {
-  render() {
-    const user = localStorage.getItem("user");
-    let userName = user ? JSON.parse(user).userName : null;
-    return (
+export default function Navbar() {
+  const navigate = useNavigate();
+  const user = localStorage.getItem("user");
+  let userName = user ? JSON.parse(user).userName : null;
+  
+  const onSearch = (e) => {
+    navigate(`/news?searchKey=${e}`);
+    window.location.reload();
+  }
+
+  return (
       <div>
         <Layout style={{ position: "fixed", zIndex: 1, width: "100%" }}>
           <Header className="header">
@@ -22,12 +30,13 @@ class Navbar extends Component {
                   </Link>
                 </div>
               </Col>
-              <Col span={13}>
+              <Col span={2}>
                 <div className="news">
-                  <Link to="/news" className="news-text">
-                    ● News
-                  </Link>
+                  <a onClick={() => {window.location.href="/news"} } className="news-text">● News</a>
                 </div>
+              </Col>
+              <Col span={11}>
+                  <Search placeholder="Search for topic" onSearch={onSearch} style={{ width: "70%", verticalAlign: "middle" }} />
               </Col>
               <Col span={2}>
                 {!userName ? (
@@ -49,7 +58,5 @@ class Navbar extends Component {
           </Header>
         </Layout>
       </div>
-    );
-  }
+  );
 }
-export default Navbar;
