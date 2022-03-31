@@ -118,10 +118,10 @@ function Admin() {
             align="middle"
             style={{ minHeight: "100vh", minWidth: "100vw" }}
           >
-            <div style={{ marginTop: "10%", marginBottom: "3%" }}>
+            <div style={{ marginTop: "10%", marginBottom: "3%", marginLeft: "20%", marginRight:"20%"}}>
               <p className="text">Current Categories:</p>
               {tagData.map((tag) => (
-                <Tag key={tag}>{tag}</Tag>
+                <Tag style={{marginBottom:"1%"}} key={tag}>{tag}</Tag>
               ))}
             </div>
             <Space direction="vertical">
@@ -173,6 +173,7 @@ function Admin() {
                   </Space>
                 </Form.Item>
               </Form>
+              Update summary by ID
               <Form onFinish={onSummaryFinish}>
                 <Form.Item
                   label="Article ID"
