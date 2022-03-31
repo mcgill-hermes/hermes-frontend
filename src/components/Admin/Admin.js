@@ -1,14 +1,15 @@
-import React, { useState } from "react";
-import { Button, Input, Modal, Form, Tag } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Input, Modal, Form, Tag, Alert } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import "./Admin.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Layout, Space } from "antd";
 
 const { Content } = Layout;
 
-const Admin = () => {
+function Admin() {
   const history = useNavigate();
+  const location = useLocation();
   const user = localStorage.getItem("user");
   const username = user ? JSON.parse(user).userName : null;
 
@@ -17,6 +18,9 @@ const Admin = () => {
   const [category, setCategory] = React.useState();
   const [summary, setSummary] = React.useState();
   const [articleID, setArticleID] = React.useState();
+  const [successful, setSuccessful] = useState(false);
+  const [categorySuccessful, setCategorySuccessful] = useState(false);
+  const [message, setMessage] = useState();
 
   const handleOnGetCategory = () => {
     const requestOptions = {
@@ -34,7 +38,9 @@ const Admin = () => {
     );
   };
 
-  handleOnGetCategory();
+  useEffect(() => {
+    handleOnGetCategory();
+  }, [location]);
 
   const handleTag = (e) => {
     setCategory(e.target.value);
@@ -65,7 +71,41 @@ const Admin = () => {
       `http://localhost:8080/category/create?category=${category}`,
       requestOptions
     ).then((response) => {
-      console.log(response);
+      if (response.ok) {
+        setMessage("Success!");
+        setCategorySuccessful(true);
+        handleOnGetCategory();
+      } else {
+        setMessage("Failed");
+        setCategorySuccessful(false);
+      }
+    });
+  };
+
+  const onSummaryFinish = (values) => {
+    const requestOptions = {
+      method: "PUT",
+      headers: {
+        Accept: "*",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        newID: articleID,
+        newSummary: summary,
+      }),
+    };
+    fetch(
+      `http://localhost:8080/updateSummaryForNews?newsID=${articleID}&newSummary=${summary}`,
+      requestOptions
+    ).then((response) => {
+      if (response.ok) {
+        setMessage("Success!");
+        setSuccessful(true);
+      } else {
+        setMessage("Failed");
+        setSuccessful(false);
+      }
     });
   };
 
@@ -124,9 +164,16 @@ const Admin = () => {
                     <Button type="primary" htmlType="submit">
                       Add
                     </Button>
+                    {message && categorySuccessful && (
+                      <Alert message={message} type="success" showIcon />
+                    )}
+                    {message && !categorySuccessful && (
+                      <Alert message={message} type="error" showIcon />
+                    )}
                   </Space>
                 </Form.Item>
-
+              </Form>
+              <Form onFinish={onSummaryFinish}>
                 <Form.Item
                   label="Article ID"
                   name="articleID"
@@ -165,6 +212,12 @@ const Admin = () => {
                     <Button type="primary" htmlType="submit">
                       Update
                     </Button>
+                    {message && successful && (
+                      <Alert message={message} type="success" showIcon />
+                    )}
+                    {message && !successful && (
+                      <Alert message={message} type="error" showIcon />
+                    )}
                   </Space>
                 </Form.Item>
               </Form>
@@ -179,6 +232,6 @@ const Admin = () => {
       <div>{Admin}</div>
     </div>
   );
-};
+}
 
 export default Admin;
