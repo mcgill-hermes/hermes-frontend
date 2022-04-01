@@ -12,14 +12,15 @@ export default function News() {
   const search = window.location.search;
   const location = useLocation();
   const params = new URLSearchParams(search);
-  // const [searchKey, setSearchKey] = useState("");
-
+  let searchKey = params.get('searchKey');
   const dummy = [{}, {}, {}, {}, {}, {}, {}, {}];
+  const isExtractive = localStorage.getItem("switchState") === "false";
+  const seperator="<-seperator->";
 
   const [categories, setCategories] = useState([]);
   const [news, setNews] = useState(dummy);
   const [loading, setLoading] = useState(true);
-  let searchKey = params.get('searchKey');
+
   
   useEffect(() => {
     searchKey = params.get('searchKey');
@@ -97,6 +98,16 @@ export default function News() {
     });
   };
 
+  const getContent = (content)=> {
+    if(!content) return content;
+    const strArr = content.split(seperator);
+    if(strArr.length > 1){
+      if(isExtractive) return strArr[1];
+      else return strArr[0];
+    }
+    return strArr;
+  }
+
   return (
     <div className="News">
       <Layout>
@@ -115,7 +126,7 @@ export default function News() {
                   align="middle"
                   style={{
                     minHeight: "100vh",
-                    marginTop: "5%",
+                    marginTop: "2%",
                     marginBottom: "5%",
                     flexWrap: "wrap",
                   }}
@@ -135,8 +146,10 @@ export default function News() {
                                 extra={<a href={element.url}>Read more</a>}
                                 style={{ width: 800, marginTop: "10px" }}
                               >
-                                <p>{element.content}</p>
-                                <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "flex-end" }}><LikeButton key={Math.random().toString(36)} /> </div>
+                                <p>{getContent(element.content)}</p>
+                                <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "flex-end" }}>
+                                  <LikeButton key={Math.random().toString(36)} /> 
+                                </div>
                               </Card>
                             );
                           })}
