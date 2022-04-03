@@ -91,12 +91,12 @@ function Admin() {
         "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify({
-        newID: articleID,
-        newSummary: summary,
+        summaryId: articleID,
+        nlprResult: summary,
       }),
     };
     fetch(
-      `http://localhost:8080/updateSummaryForNews?newsID=${articleID}&newSummary=${summary}`,
+      `http://localhost:8080/updateSummaryForNews?newsID=${articleID}`,
       requestOptions
     ).then((response) => {
       if (response.ok) {

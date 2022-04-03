@@ -40,13 +40,9 @@ const Profile = () => {
         Accept: "*",
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({
-        username: username,
-        password: password,
-      }),
+      }
     };
-    fetch("http://localhost:8080/user/delete", requestOptions).then(
+    fetch(`http://localhost:8080/myaccount/delete?username=${username}&password=${password}`, requestOptions).then(
       (response) => {
         if (response.ok) {
           response.text().then((data) => {

@@ -98,10 +98,13 @@ export default function News() {
     });
   };
 
-  const getContent = (content)=> {
-    if(!content) return content;
-    const strArr = content.split(seperator);
+  const getContent = (element)=> {
+    if(!element.content || !element.summaryDto) return element.content;
+    const summaryText = element.summaryDto.nlprResult
+    const strArr = summaryText.split(seperator);
+    console.log(strArr);
     if(strArr.length > 1){
+      console.log(strArr.length);
       if(isExtractive) return strArr[1];
       else return strArr[0];
     }
@@ -146,7 +149,7 @@ export default function News() {
                                 extra={<a href={element.url}>Read more</a>}
                                 style={{ width: 800, marginTop: "10px" }}
                               >
-                                <p>{getContent(element.content)}</p>
+                                <p>{getContent(element)}</p>
                                 <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "flex-end" }}>
                                   <LikeButton key={Math.random().toString(36)} /> 
                                 </div>
